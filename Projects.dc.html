@@ -22,7 +22,7 @@
   <style>
     #contact input, #contact textarea { padding: 8px 12px !important; }
     header { padding-left: clamp(24px, 6.6vw, 96px) !important; padding-right: clamp(24px, 6.6vw, 96px) !important; }
-    header a > div > div { align-items: center !important; }
+    header a > div > div { align-items: baseline !important; } /* NOT center: the two scripts have different font metrics, so centering their line boxes leaves the baselines 5px apart and the wordmark jumps mid-crossfade. */
     header a > div > div > div { line-height: 1.5 !important; }
     header a > div > div > div:last-child { color: transparent !important; background-image: var(--wordmark-sweep) !important; -webkit-background-clip: text !important; background-clip: text !important; padding: 0 0.08em !important; margin-left: -0.08em !important; overflow: visible !important; }
 
