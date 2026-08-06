@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="uploads/t-scmple.png">
+<meta name="ext-resource-dependency" content="uploads/t-brhat.png">
+<meta name="ext-resource-dependency" content="uploads/t-0806-1250.png">
+<meta name="ext-resource-dependency" content="uploads/t-0805-1410.png">
+<meta name="ext-resource-dependency" content="uploads/t-0805-2159.png">
+<meta name="ext-resource-dependency" content="uploads/t-0805-1445.png">
+<meta name="ext-resource-dependency" content="uploads/t-0805-1313.png">
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#1a1614"/><text x="100" y="128" font-family="Georgia, serif" font-size="88" font-weight="700" text-anchor="middle" fill="#E8A33D">I</text><text x="100" y="128" font-family="Georgia, serif" font-size="88" font-weight="700" text-anchor="middle" fill="#C9603A" opacity="0.55" transform="translate(14,0)">S</text></svg></template>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/indic-software-699c7430-2801-4768-aeb4-e028ebdb02f5/_ds_bundle.css">
+  <link rel="stylesheet" href="_ds/indic-software-699c7430-2801-4768-aeb4-e028ebdb02f5/styles.css">
+  <script src="_ds/indic-software-699c7430-2801-4768-aeb4-e028ebdb02f5/_ds_bundle.js"></script>
+  <style>
+    #contact input, #contact textarea { padding: 8px 12px !important; }
+    header { padding-left: clamp(24px, 6.6vw, 96px) !important; padding-right: clamp(24px, 6.6vw, 96px) !important; }
+    header a > div > div { align-items: center !important; }
+    header a > div > div > div { line-height: 1.5 !important; }
+    header a > div > div > div:last-child { color: transparent !important; background-image: var(--wordmark-sweep) !important; -webkit-background-clip: text !important; background-clip: text !important; padding: 0 0.08em !important; margin-left: -0.08em !important; overflow: visible !important; }
+  </style>
+</helmet>
+
+<div style="max-width: 1440px; margin: 0 auto; background: var(--surface-page); overflow-x: clip;">
+  <div style="{{ headerWrapperStyle }}">
+    <x-import component-from-global-scope="IndicSoftware.Header" links="{{ navLinks }}" action="Get in touch" on-action="{{ openMail }}" animate-wordmark="{{ true }}" home-href="Indic Software Landing.dc.html" hint-size="100%,88px"></x-import>
+  </div>
+
+  <section style="border-bottom: 1px solid var(--border-hairline); --wash-paper: var(--wash-sunrise);">
+    <x-import component-from-global-scope="IndicSoftware.Motif" name="sooryodaya" height="auto" hint-size="100%,420px">
+      <div style="box-sizing: border-box; padding: clamp(56px, 8vw, 120px) clamp(24px, 6.6vw, 96px) clamp(48px, 6vw, 88px); max-width: 78ch;">
+        <p style="margin: 0 0 clamp(20px, 3vw, 32px); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--amber-600);">Projects</p>
+        <h1 style="margin: 0; font-size: clamp(34px, 4.8vw, 64px); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">Our work</h1>
+        <p style="margin: clamp(24px, 3vw, 36px) 0 0; font-size: clamp(19px, 1.5vw, 22px); line-height: var(--leading-body); color: var(--ink-700); text-wrap: pretty;">We've designed and built digital experiences for early-stage startups, non-profits, and enterprises across India.</p>
+      </div>
+    </x-import>
+  </section>
+
+  <div style="display: flex; flex-direction: column; gap: clamp(64px, 8vw, 96px); padding: clamp(48px, 8vw, 96px) var(--gutter-page);">
+    <div style="display: none;"></div>
+
+    <sc-if value="{{ groupFeatured }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: var(--space-5);">
+        <sc-for list="{{ projects }}" as="proj" hint-placeholder-count="12">
+          <a data-reveal="" href="{{ proj.url }}" target="_blank" rel="noopener" style="display: grid; grid-template-columns: clamp(140px, 20vw, 240px) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: center; padding: var(--space-5) var(--space-5); margin: 0 calc(-1 * var(--space-5)); border-bottom: 1px solid var(--line-300); color: inherit; text-decoration: none; transition: background 200ms cubic-bezier(0.22, 0.61, 0.36, 1);" style-hover="background: var(--surface-sunken);">
+            <div style="border-radius: 18px; background: var(--surface-card); border: 1px solid var(--border-hairline); padding: 8px 8px 12px; box-shadow: 0 14px 30px -18px rgba(31, 24, 12, 0.14), 0 3px 10px -6px rgba(31, 24, 12, 0.06);">{{ proj.thumb }}<div style="width: 28px; height: 3px; border-radius: 999px; background: var(--tint-amber-16); margin: 5px auto 0;"></div></div>
+            <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4);">
+                <h3 style="margin: 0; font-size: var(--text-heading-3); line-height: 1.25; letter-spacing: var(--tracking-heading); font-weight: 600; color: var(--text-primary);">{{ proj.title }}</h3>
+                <span style="font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-accent);">{{ proj.domain }} →</span>
+              </div>
+              <p style="max-width: 60ch; font-size: var(--text-body-md); line-height: var(--leading-body); color: var(--text-body); margin: 0;">{{ proj.description }}</p>
+              <span style="font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-secondary);">{{ proj.tech }}</span>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <section id="contact" style="background: var(--surface-ink);">
+    <x-import component-from-global-scope="IndicSoftware.Motif" name="aavartan" on-ink="{{ true }}" height="140px" hint-size="100%,140px"></x-import>
+    <div style="padding: clamp(48px, 6vw, 96px) clamp(24px, 6.6vw, 96px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(40px, 6vw, 96px); align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px);">
+        <div>
+          <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--turmeric-400);">Contact</p>
+          <h2 style="margin: 0; max-width: 20ch; font-size: clamp(32px, 4.6vw, 66px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-on-ink); text-wrap: pretty;">Building something new?</h2>
+          <p style="margin: var(--space-5) 0 0; max-width: 44ch; font-size: var(--text-body-lg); line-height: var(--leading-body); color: var(--text-on-ink-muted);">We partner with founders and teams to build web products. Write to us with your idea.</p>
+        </div>
+        <div style="border-top: 1px solid var(--tint-amber-16); padding-top: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; gap: var(--space-2);">
+          <p style="margin: 0; font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-on-ink-muted);">Or write to us directly</p>
+          <a href="mailto:contact@indic.software" style="font-size: clamp(20px, 2vw, 26px); letter-spacing: var(--tracking-heading); color: var(--turmeric-400);">contact@indic.software</a>
+          <p style="margin: 0; font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-on-ink-muted);">India · IST (UTC+5:30)</p>
+        </div>
+      </div>
+      <div style="border: 1px solid var(--tint-amber-16); padding: clamp(28px, 3.4vw, 44px); display: flex; flex-direction: column; gap: var(--space-4); --text-muted: var(--text-on-ink-muted); --surface-card: rgba(250, 244, 232, 0.07); --text-primary: var(--text-on-ink); --border-hairline: var(--tint-amber-16);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+          <x-import component-from-global-scope="IndicSoftware.Input" label="Name" value="{{ contactName }}" on-change="{{ onContactNameChange }}" placeholder="Your name" hint-size="100%,64px"></x-import>
+          <x-import component-from-global-scope="IndicSoftware.Input" label="Email" type="email" value="{{ contactEmail }}" on-change="{{ onContactEmailChange }}" placeholder="you@company.com" hint-size="100%,64px"></x-import>
+        </div>
+        <x-import component-from-global-scope="IndicSoftware.Input" label="What are you building?" multiline="{{ true }}" rows="{{ 4 }}" value="{{ contactMessage }}" on-change="{{ onContactMessageChange }}" placeholder="Tell us about the project" hint-size="100%,120px"></x-import>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-2);">
+          <x-import component-from-global-scope="IndicSoftware.Button" variant="accent" on-click="{{ submitContact }}" hint-size="auto,40px">Start a project</x-import>
+          <p style="margin: 0; font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-muted);">We reply within two working days</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding: clamp(40px, 4vw, 64px) clamp(24px, 6.6vw, 96px); display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: center; justify-content: space-between; border-top: 1px solid var(--border-hairline);">
+    <x-import component-from-global-scope="IndicSoftware.Wordmark" size="{{ 30 }}" hint-size="auto,44px"></x-import>
+    <p style="font-family: var(--font-mono); font-size: var(--text-micro); color: var(--text-muted);">Indic Software Solutions · Design and engineering for web products · Nashik, India</p>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { contactName: '', contactEmail: '', contactMessage: '', headerVisible: true };
+
+  renderVals() {
+    const projects = [
+      { url: 'https://app.scmple.com/', num: '01', title: 'SCmple', domain: 'app.scmple.com', description: 'Supply and operations planning platform for pharma: demand and supply balanced against real capacity, what-if scenarios, and planner dashboards.', tech: 'Ruby on Rails', image: 'uploads/t-scmple.png', imageFit: 'cover' },
+      { url: 'https://www.brhat.in/', num: '02', title: 'Bṛhat Culture Consulting', domain: 'brhat.in', description: 'A culture engine for Indian knowledge systems, featuring courses, programs, and open-access resources on cultural studies.', tech: 'WordPress · Custom plugins', image: 'uploads/t-brhat.png', imageFit: 'cover' },
+      { url: 'https://khojstudios.org/', num: '03', title: 'Khoj Studios', domain: 'khojstudios.org', description: 'Artist collective website showcasing contemporary art practices, residencies, and exhibitions in New Delhi.', tech: 'Webflow', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fkhojstudios.org%2F?w=448', imageFit: 'cover' },
+      { url: 'https://theloftforum.org/', num: '04', title: 'The Loft Forum', domain: 'theloftforum.org', description: 'Platform for emerging writers and curators to publish essays, reviews, and critical discourse on contemporary culture.', tech: 'Ghost · Markdown', image: 'uploads/t-0806-1250.png', imageFit: 'cover' },
+      { url: 'https://www.rootvx.com/', num: '05', title: 'rootVX', domain: 'rootvx.com', description: 'Website for an enterprise tokenization studio for real-world assets.', tech: 'Webflow', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.rootvx.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://localground.in/', num: '07', title: 'Localground', domain: 'localground.in', description: 'Portfolio website for an architecture practice based in Pune.', tech: 'Jekyll · S3', image: 'uploads/t-0805-1410.png', imageFit: 'contain' },
+      { url: 'http://ohrna.com/', num: '08', title: 'Ohrna', domain: 'ohrna.com', description: 'An e-commerce store for handmade jute products made by rural women artisans in Maharashtra.', tech: 'WordPress · WooCommerce', image: 'https://s0.wp.com/mshots/v1/http%3A%2F%2Fohrna.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://studioemergence.in/', num: '09', title: 'Studio Emergence', domain: 'studioemergence.in', description: 'Website for a Mumbai architecture studio working in parametric design.', tech: 'WordPress', image: 'uploads/t-0805-2159.png', imageFit: 'contain' },
+      { url: 'https://justbeingcenter.com/', num: '10', title: 'Just Being Center', domain: 'justbeingcenter.com', description: 'Wellness and meditation center website with booking system for classes and retreats.', tech: 'Webflow · Zapier', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fjustbeingcenter.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://www.naivestreets.com/', num: '12', title: 'Naive Streets', domain: 'naivestreets.com', description: 'A street photography portfolio with precise, uncropped image frames on every screen size.', tech: 'Jekyll · Cloudinary', image: 'uploads/t-0805-1445.png', imageFit: 'contain' },
+      { url: 'https://onwaa.ca/', num: '13', title: 'ONWAA', domain: 'onwaa.ca', description: 'Website for the Ontario Native Welfare Administrators\' Association: training and events for First Nation social service administrators.', tech: 'Ruby on Rails · Active Storage', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fonwaa.ca%2F?w=448', imageFit: 'cover' },
+      { url: 'https://www.pratiks.info/', num: '14', title: 'Pratik Shah', domain: 'pratiks.info', description: 'Academic website for a research group working on AI in medicine.', tech: 'Jekyll', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.pratiks.info%2F?w=448', imageFit: 'cover' },
+      { url: 'https://www.houseofthedesignery.com/', num: '15', title: 'House of the Designery', domain: 'houseofthedesignery.com', description: 'Design studio portfolio showcasing branding, packaging, and editorial design projects.', tech: 'Webflow', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.houseofthedesignery.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://danaawartani.com/', num: '16', title: 'Dana Awartani', domain: 'danaawartani.com', description: 'Artist website for an Indian sculptor working with traditional materials and contemporary forms.', tech: 'Cargo', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fdanaawartani.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://www.indiaspend.com/', num: '17', title: 'India Spend', domain: 'indiaspend.com', description: 'Data journalism platform covering public expenditure and governance in India.', tech: 'WordPress · MySQL', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.indiaspend.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://www.ct-economics.net/', num: '18', title: 'CT Economics', domain: 'ct-economics.net', description: 'Economics research and education portal for institutional and individual learners.', tech: 'Hugo · Netlify', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.ct-economics.net%2F?w=448', imageFit: 'cover' },
+      { url: 'https://3for-project.org/', num: '19', title: '3for Project', domain: '3for-project.org', description: 'NGO working on sustainable development with a focus on community-led initiatives.', tech: 'Squarespace', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2F3for-project.org%2F?w=448', imageFit: 'cover' },
+      { url: 'https://finternetlab.io/', num: '20', title: 'Finternet Lab', domain: 'finternetlab.io', description: 'Research lab building the financial system for the future through open digital infrastructure.', tech: 'Webflow · Airtable', image: 'uploads/t-0805-1313.png', imageFit: 'contain' },
+      { url: 'https://scmindcorp.com/', num: '21', title: 'SC Mind Corp', domain: 'scmindcorp.com', description: 'Mental wellness platform with teletherapy and coaching services.', tech: 'Ruby on Rails · React', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fscmindcorp.com%2F?w=448', imageFit: 'cover' },
+      { url: 'https://networksforhumanity.org/', num: '22', title: 'Networks for Humanity', domain: 'networksforhumanity.org', description: 'Collaborative platform for NGOs and nonprofits working on social impact initiatives.', tech: 'WordPress · BuddyPress', image: 'https://s0.wp.com/mshots/v1/https%3A%2F%2Fnetworksforhumanity.org%2F?w=448', imageFit: 'cover' }
+    ];
+
+    projects.forEach((p) => {
+      p.thumb = React.createElement('img', {
+        src: p.image,
+        alt: 'Screenshot of ' + p.title,
+        loading: 'lazy',
+        style: { width: '100%', aspectRatio: '16/10', objectFit: p.imageFit, objectPosition: 'center', display: 'block', border: '1px solid var(--border-hairline)', background: 'var(--surface-sunken)', borderRadius: '10px' }
+      });
+    });
+
+    return {
+      headerWrapperStyle: { position: 'sticky', top: 0, zIndex: 40, background: 'var(--surface-page)', opacity: this.state.headerVisible ? 1 : 0, transform: this.state.headerVisible ? 'translateY(0)' : 'translateY(-6px)', pointerEvents: this.state.headerVisible ? 'auto' : 'none', transition: 'opacity 200ms cubic-bezier(0.22,0.61,0.36,1), transform 200ms cubic-bezier(0.22,0.61,0.36,1)' },
+      navLinks: [
+        { label: 'Services', href: 'Indic Software Landing.dc.html#services' },
+        { label: 'How we work', href: 'Indic Software Landing.dc.html#process' },
+        { label: 'Projects', href: 'Projects.dc.html', active: true },
+        { label: 'About', href: 'About.dc.html' }
+      ],
+      openMail: () => { window.location.href = 'mailto:akshat@indic.software'; },
+      contactName: this.state.contactName,
+      contactEmail: this.state.contactEmail,
+      contactMessage: this.state.contactMessage,
+      onContactNameChange: (e) => this.setState({ contactName: e.target.value }),
+      onContactEmailChange: (e) => this.setState({ contactEmail: e.target.value }),
+      onContactMessageChange: (e) => this.setState({ contactMessage: e.target.value }),
+      submitContact: () => {
+        const { contactName, contactEmail, contactMessage } = this.state;
+        const subject = 'Project inquiry from ' + (contactName || 'website');
+        const body = 'Name: ' + contactName + '\nEmail: ' + contactEmail + '\n\n' + contactMessage;
+        window.location.href = 'mailto:contact@indic.software?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      },
+      projects,
+      groupFeatured: projects.length > 0,
+      nextProjectNum: String(projects.length + 1).padStart(2, '0')
+    };
+  }
+
+  componentDidMount() {
+    this._onScroll = () => {
+      if (!this.state.headerVisible) this.setState({ headerVisible: true });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+  }
+
+  componentWillUnmount() { window.removeEventListener('scroll', this._onScroll); clearTimeout(this._headerHideTimer); }
+}
+</script>
+</body>
+</html>

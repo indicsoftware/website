@@ -1,0 +1,254 @@
+/* Webfonts — served from Google Fonts.
+   Figtree (Latin), Anek Devanagari (Devanagari), IBM Plex Mono (code/spec labels).
+   No licensed binaries were provided; if the studio buys a licence for a closer
+   Latin grotesque, drop the files in assets/fonts/ and replace this import with
+   local @font-face rules. */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Anek+Devanagari:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ---- Base palette ---------------------------------------------------- */
+  --ink-900: #16130f;      /* the only near-black; all type */
+  --ink-700: #3c342b;
+  --ink-500: #5f5346;
+  --ink-300: #8a7f6f;
+  --ink-200: #a1946f;
+
+  --paper-000: #fffdf9;
+  --paper-100: #fdfcf9;    /* default ground */
+  --paper-200: #fbf6ea;
+  --paper-300: #f8f0e2;
+  --line-100: #f0e6d6;     /* hairlines */
+  --line-200: #ece5d6;
+  --line-300: #dccdb4;
+
+  --marigold-500: #ff8f1c; /* primary accent */
+  --marigold-300: #ffc98a;
+  --amber-600: #a1631c;    /* readable accent, Devanagari wordmark */
+  --amber-400: #c98a3c;
+  --turmeric-400: #ffb75e; /* accent on ink surfaces only */
+  --sand-200: #ffd9a3;
+  --sand-100: #ffe9c9;
+  --sand-050: #fff6e6;
+
+  /* Motif tints — never full-strength ink */
+  --tint-amber-12: rgba(161, 99, 28, 0.12);
+  --tint-amber-16: rgba(161, 99, 28, 0.16);
+  --tint-amber-20: rgba(161, 99, 28, 0.20);
+  --tint-amber-26: rgba(161, 99, 28, 0.26);
+  --tint-amber-30: rgba(161, 99, 28, 0.30);
+  --tint-amber-40: rgba(161, 99, 28, 0.40);
+  --tint-marigold-14: rgba(255, 143, 28, 0.14);
+  --tint-turmeric-16: rgba(255, 183, 94, 0.16);
+  --tint-ink-28: rgba(22, 19, 15, 0.28);
+
+  /* ---- Semantic aliases ------------------------------------------------ */
+  --text-primary: var(--ink-900);
+  --text-body: var(--ink-700);
+  --text-secondary: var(--ink-500);
+  --text-muted: var(--ink-300);
+  --text-accent: var(--amber-600);
+  --text-on-ink: var(--paper-100);
+  --text-on-ink-muted: #9c9284;
+  --text-on-accent: var(--ink-900);
+
+  --surface-page: var(--paper-100);
+  --surface-card: var(--paper-000);
+  --surface-sunken: var(--paper-200);
+  --surface-ink: var(--ink-900);
+  --surface-accent: var(--marigold-500);
+
+  --border-hairline: var(--line-200);
+  --border-strong: var(--ink-900);
+  --border-error: #f2ddd6;
+
+  --focus-ring: var(--amber-600);
+
+  /* The sunrise wash — one angle, three stops, light at the top */
+  --wash-sunrise: linear-gradient(170deg, #fff6e6 0%, #ffe9c9 46%, #ffd9a3 100%);
+  --wash-paper: linear-gradient(158deg, #fffdf9 0%, #fdf7ec 52%, #f8f0e2 100%);
+  --wash-leaf: linear-gradient(170deg, #f4f8ea 0%, #e4efd2 52%, #cfe4b4 100%);
+  --wash-ink: linear-gradient(160deg, #241d16 0%, #16130f 100%);
+
+  /* Approved wordmark fill: turmeric → marigold → terracotta, left to right.
+     Paper grounds only,
+     44px and up; everything else uses flat ink. */
+  --wordmark-sweep: linear-gradient(96deg, #ffb03c 0%, #ff8f1c 34%, #e0611f 66%, #b93a2b 100%);
+
+  /* Fine paper grain, layered at soft-light above a wash. Keep under 30%. */
+  --grain: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMycgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJyBmaWx0ZXI9J3VybCgjbiknIG9wYWNpdHk9JzAuMjgnLz48L3N2Zz4=");
+}
+
+:root {
+  --font-latin: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-devanagari: "Anek Devanagari", "Figtree", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --font-body: var(--font-latin);
+  --font-heading: var(--font-latin);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Type scale — display sizes carry negative tracking, captions positive */
+  --text-display-1: 92px;
+  --text-display-2: 66px;
+  --text-display-3: 52px;
+  --text-heading-1: 42px;
+  --text-heading-2: 33px;
+  --text-heading-3: 26px;
+  --text-lead: 20px;
+  --text-body-lg: 18px;
+  --text-body-md: 16px;
+  --text-body-sm: 15px;
+  --text-caption: 14px;
+  --text-micro: 12px;
+
+  --leading-display: 1.0;
+  --leading-heading: 1.15;
+  --leading-body: 1.65;
+
+  --tracking-wordmark: -0.05em;
+  /* Side-bearing compensation for the Latin wordmark — apply as a negative
+     margin-left so the "i" stem sits optically flush with its left edge. */
+  --wordmark-optical-left: -0.047em;
+  --tracking-display: -0.045em;
+  --tracking-heading: -0.03em;
+  --tracking-body: 0em;
+  --tracking-caption: 0.36em;  /* tracked caps: kickers, captions, labels */
+  --tracking-eyebrow: 0.3em;
+}
+
+:root {
+  /* 8px unit — every motif repeat and every gap is a multiple of it */
+  --space-unit: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 44px;
+  --space-8: 56px;
+  --space-9: 72px;
+  --space-10: 96px;
+  --space-11: 128px;
+
+  --gutter-page: 96px;
+  --gutter-page-sm: 24px;
+  --measure-prose: 68ch;
+  --width-page: 1440px;
+}
+
+:root {
+  /* Surfaces are square. The pill is reserved for buttons and avatars —
+     it is the one soft shape in the system. */
+  --radius-none: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-pill: 999px;
+  --radius-circle: 999px;
+
+  --border-width-hairline: 1px;
+  --border-width-motif: 1.5px;
+  --border-width-strong: 2px;
+
+  /* Elevation is drawn with hairlines, not shadow. The two shadows below are
+     for overlays only (dialog, tooltip). */
+  --shadow-none: none;
+  --shadow-overlay: 0 24px 60px rgba(22, 19, 15, 0.18);
+  --shadow-tooltip: 0 8px 20px rgba(22, 19, 15, 0.14);
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 420ms;
+}
+
+/* Ten motifs, all soft rounded geometry drawn in CSS: circles, arcs, scallops.
+   Hairline weight (1–1.5px), amber/sand at 12–40%, always running off the edge.
+   Two of them (Torana, Veni, Sooryodaya, Mandala) are structural — see the
+   Motif component — the rest are pure background-image patterns.            */
+
+:root {
+  --motif-jaali: repeating-radial-gradient(circle at 0 50%, transparent 0 29px, var(--tint-amber-30) 29px 30px, transparent 30px 60px);
+  --motif-kolam: radial-gradient(var(--tint-amber-26) 1.5px, transparent 2px);
+  --motif-kolam-size: 34px 34px;
+  --motif-lahar: radial-gradient(circle at 50% 100%, var(--tint-amber-16) 0 44px, transparent 44px);
+  --motif-lahar-size: 88px 88px;
+  --motif-aavartan: repeating-radial-gradient(circle at 50% 118%, transparent 0 33px, var(--tint-amber-26) 33px 34px, transparent 34px 68px);
+  --motif-handloom: repeating-linear-gradient(90deg, var(--tint-amber-26) 0 1.5px, transparent 1.5px 26px, var(--tint-amber-12) 26px 40px, transparent 40px 66px);
+  --motif-chhapa: radial-gradient(circle, var(--tint-amber-20) 0 13px, transparent 13px), radial-gradient(circle, var(--tint-marigold-14) 0 13px, transparent 13px);
+  --motif-chhapa-size: 66px 66px, 66px 66px;
+  --motif-chhapa-position: 0 0, 33px 33px;
+  --motif-ripple-ink: repeating-radial-gradient(circle at 108% 112%, transparent 0 56px, var(--tint-turmeric-16) 56px 57px, transparent 57px 114px);
+}
+
+/* --- Grounds ----------------------------------------------------------- */
+.ds-ground-paper { background-image: var(--grain), var(--wash-paper); background-blend-mode: soft-light, normal; background-size: 140px 140px, auto; }
+.ds-ground-sunrise { background-image: var(--grain), var(--wash-sunrise); background-blend-mode: soft-light, normal; background-size: 140px 140px, auto; }
+.ds-ground-ink { background-image: var(--grain), var(--wash-ink); background-blend-mode: soft-light, normal; background-size: 140px 140px, auto; color: var(--text-on-ink); }
+
+/* --- Pattern motifs ---------------------------------------------------- */
+.motif-jaali { background-image: var(--motif-jaali), var(--wash-paper); }
+.motif-kolam { background-image: var(--motif-kolam), var(--wash-paper); background-size: var(--motif-kolam-size), auto; }
+.motif-lahar { background-image: var(--motif-lahar), var(--wash-paper); background-size: var(--motif-lahar-size), auto; }
+.motif-aavartan { background-image: var(--motif-aavartan), var(--wash-paper); }
+.motif-handloom { background-image: var(--motif-handloom), var(--wash-paper); }
+.motif-chhapa { background-image: var(--motif-chhapa), var(--wash-paper); background-size: var(--motif-chhapa-size), auto; background-position: var(--motif-chhapa-position), 0 0; }
+.motif-aavartan-on-ink { background-image: var(--grain), var(--motif-ripple-ink), var(--wash-ink); background-blend-mode: soft-light, normal, normal; background-size: 140px 140px, auto, auto; color: var(--text-on-ink); }
+
+/* Scale a pattern up or down by overriding the tint stop distances with
+   --motif-scale on the element: transform is never used on a motif. */
+
+/* Base element styling — the minimum a consumer needs after linking styles.css */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+body {
+  margin: 0;
+  background-color: var(--surface-page);
+  background-image: var(--grain), var(--wash-paper);
+  background-blend-mode: soft-light, normal;
+  background-size: 140px 140px, auto;
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md);
+  line-height: var(--leading-body);
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
+  text-wrap: pretty;
+}
+h1 { font-size: var(--text-display-2); letter-spacing: var(--tracking-display); line-height: 1.02; }
+h2 { font-size: var(--text-heading-1); }
+h3 { font-size: var(--text-heading-2); }
+h4 { font-size: var(--text-heading-3); }
+
+p { margin: 0 0 var(--space-4); max-width: var(--measure-prose); text-wrap: pretty; }
+
+a { color: var(--text-accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--text-primary); }
+
+code, kbd, pre, .ds-mono { font-family: var(--font-mono); font-size: 0.92em; }
+
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+::selection { background: var(--sand-100); }
+
+hr { border: none; border-top: 1px solid var(--border-hairline); margin: var(--space-6) 0; }
+
+/* --- Brand type utilities ---------------------------------------------- */
+.ds-wordmark { font-family: var(--font-latin); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-wordmark); line-height: 0.9; color: var(--text-primary); }
+.ds-wordmark-devanagari { font-family: var(--font-devanagari); font-weight: var(--weight-medium); letter-spacing: 0; line-height: 1.1; color: var(--text-primary); }
+.ds-eyebrow { font-size: var(--text-micro); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--text-muted); }
+.ds-caption { font-size: var(--text-caption); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-secondary); }
+.ds-lead { font-size: var(--text-lead); line-height: var(--leading-body); color: var(--text-secondary); }
+
