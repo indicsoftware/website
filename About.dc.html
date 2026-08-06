@@ -29,7 +29,117 @@
     header a > div > div { align-items: center !important; }
     header a > div > div > div { line-height: 1.5 !important; }
     header a > div > div > div:last-child { color: transparent !important; background-image: var(--wordmark-sweep) !important; -webkit-background-clip: text !important; background-clip: text !important; padding: 0 0.08em !important; margin-left: -0.08em !important; overflow: visible !important; }
+
+    /* Page gutter tracks the viewport instead of sitting at a fixed 96px. */
+    :root { --gutter-page: clamp(24px, 6.6vw, 96px); }
+
+    /* Nav labels never wrap — a wrapped "How we work" inflates the sticky header. */
+    header nav a { white-space: nowrap; }
+    .mnav-toggle { display: none; }
+
+    /* Desktop: widen the tap target without moving the active-link underline. */
+    @media (min-width: 640px) {
+      header nav a { position: relative; }
+      header nav a::after { content: ''; position: absolute; left: -6px; right: -6px; top: 50%; transform: translateY(-50%); height: 44px; }
+    }
+
+    /* Mobile: nav collapses behind a toggle and drops into its own row. */
+    @media (max-width: 639px) {
+      header[data-mnav] { flex-wrap: wrap; row-gap: 0; }
+      /* !important throughout: the design-system Header sets these inline. */
+      header[data-mnav] > nav { display: none !important; }
+      header[data-mnav][data-mnav-open="true"] > nav { display: flex !important; flex-basis: 100%; flex-direction: column !important; align-items: stretch !important; gap: 0 !important; padding: 8px 0 4px; }
+      header[data-mnav] > nav > a { min-height: 44px; display: flex !important; align-items: center; border-bottom: 1px solid var(--border-hairline) !important; }
+      header[data-mnav] > nav > button { width: 100% !important; margin-top: var(--space-4); }
+      .mnav-toggle { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+      .mnav-toggle span { display: block; width: 22px; height: 2px; border-radius: 2px; background: var(--ink-900); transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(2) { opacity: 0; }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      /* Remaining standalone links below the 44px tap minimum. */
+      header > a { min-height: 44px; align-items: center; }
+      a[href^="mailto:"] { display: inline-flex; align-items: center; min-height: 44px; }
+    }
   </style>
+  <script>
+    /* Adds a mobile toggle to the design-system Header, which ships desktop-only.
+       Kept here rather than in _ds_bundle.js so a design re-sync can't clobber it. */
+    (function () {
+      if (window.__indicMobileNav) return;
+      window.__indicMobileNav = true;
+      var BP = 639, seq = 0, queued = false;
+
+      function enhance() {
+        queued = false;
+        var headers = document.querySelectorAll('header');
+        for (var i = 0; i < headers.length; i++) {
+          var h = headers[i];
+          if (h.hasAttribute('data-mnav')) continue;
+          var nav = h.querySelector(':scope > nav');
+          if (!nav) continue;
+          h.setAttribute('data-mnav', '');
+          h.setAttribute('data-mnav-open', 'false');
+          if (!nav.id) nav.id = 'mnav-' + (++seq);
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mnav-toggle';
+          btn.setAttribute('aria-label', 'Open menu');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-controls', nav.id);
+          btn.innerHTML = '<span></span><span></span><span></span>';
+          h.insertBefore(btn, nav);
+        }
+      }
+
+      function schedule() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(enhance);
+      }
+
+      function setOpen(h, open) {
+        h.setAttribute('data-mnav-open', open ? 'true' : 'false');
+        var btn = h.querySelector(':scope > .mnav-toggle');
+        if (btn) {
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        }
+      }
+
+      function closeAll() {
+        var open = document.querySelectorAll('header[data-mnav-open="true"]');
+        for (var i = 0; i < open.length; i++) setOpen(open[i], false);
+      }
+
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var btn = t.closest('.mnav-toggle');
+        if (btn) {
+          var h = btn.closest('header');
+          if (h) setOpen(h, h.getAttribute('data-mnav-open') !== 'true');
+          return;
+        }
+        /* Any nav item inside an open panel dismisses it. */
+        if (t.closest('header[data-mnav-open="true"] nav') && t.closest('a, button')) closeAll();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > BP) closeAll();
+      });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhance);
+      } else {
+        enhance();
+      }
+      new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
 </helmet>
 
 <div style="max-width: 1440px; margin: 0 auto; background: var(--surface-page); overflow-x: clip;">
@@ -53,7 +163,7 @@
       <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">Team</p>
       <h2 style="margin: 0; max-width: 24ch; font-size: clamp(30px, 4vw, 52px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">The people doing the work</h2>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: var(--space-5);">
 
       <div data-reveal="" style="display: flex; flex-direction: column; gap: var(--space-4);">
         <image-slot id="team-photo-1" src="uploads/small-Akshat.png" shape="rect" fit="cover" placeholder="Drop a photo" style="width: 100%; aspect-ratio: 4/5;"></image-slot>
@@ -124,7 +234,7 @@
 
   <section style="background: var(--surface-ink);">
     <x-import component-from-global-scope="IndicSoftware.Motif" name="aavartan" on-ink="{{ true }}" height="140px" hint-size="100%,140px"></x-import>
-    <div style="padding: clamp(48px, 6vw, 96px) clamp(24px, 6.6vw, 96px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(32px, 5vw, 72px); align-items: end;">
+    <div style="padding: clamp(48px, 6vw, 96px) clamp(24px, 6.6vw, 96px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: clamp(32px, 5vw, 72px); align-items: end;">
       <div data-reveal="">
         <h2 style="margin: 0; max-width: 20ch; font-size: clamp(32px, 4.6vw, 66px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-on-ink); text-wrap: pretty;">Join our team.</h2>
         <p style="margin: var(--space-5) 0 0; max-width: 44ch; font-size: var(--text-body-lg); line-height: var(--leading-body); color: var(--text-on-ink-muted);">We take on designers and Rails engineers who want to own a product end to end, not a ticket queue.</p>

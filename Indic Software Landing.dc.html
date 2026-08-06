@@ -31,7 +31,146 @@
     header a > div > div { align-items: center !important; }
     header a > div > div > div { line-height: 1.5 !important; }
     header a > div > div > div:last-child { color: transparent !important; background-image: var(--wordmark-sweep) !important; -webkit-background-clip: text !important; background-clip: text !important; padding: 0 0.08em !important; margin-left: -0.08em !important; overflow: visible !important; }
+
+    /* Page gutter tracks the viewport instead of sitting at a fixed 96px. */
+    :root { --gutter-page: clamp(24px, 6.6vw, 96px); }
+
+    /* The featured card's screenshot panel sits beside the text and is separated by
+       a vertical rule. Below 786px the two panels stack, where that rule reads as a
+       stray line down the image — it becomes the divider above it instead. */
+    @media (max-width: 785px) {
+      #featured-shot { border-left: 0 !important; border-top: 1px solid var(--border-hairline); min-height: 0 !important; }
+    }
+
+    /* The four process cards are authored for one 4-across row: the first is flush
+       left, the last flush right, and vertical rules divide them. Any other column
+       count strands those edges mid-layout, so pin the count per breakpoint and
+       re-derive which edges are flush. At 1106px+ auto-fit gives 4 and the inline
+       styles are already right. */
+    @media (max-width: 779px) {
+      #process-steps { grid-template-columns: 1fr !important; }
+      #process-steps > div { padding-left: 0 !important; padding-right: 0 !important; border-right: 0 !important; }
+      #process-steps > div:not(:last-child) { border-bottom: 1px solid var(--border-hairline); }
+    }
+    @media (min-width: 780px) and (max-width: 1105px) {
+      #process-steps { grid-template-columns: repeat(2, 1fr) !important; }
+      #process-steps > div:nth-child(odd) { padding-left: 0 !important; }
+      #process-steps > div:nth-child(even) { padding-right: 0 !important; border-right: 0 !important; }
+      #process-steps > div:nth-child(-n+2) { border-bottom: 1px solid var(--border-hairline); }
+    }
+
+    /* The Services intro is sticky so it holds beside the scrolling list — which
+       only makes sense in the two-column layout. That grid collapses to one column
+       below ~783px, where a sticky intro would instead slide over the list. */
+    @media (max-width: 799px) { #services-intro { position: static !important; } }
+
+    /* Nav labels never wrap — a wrapped "How we work" inflates the sticky header. */
+    header nav a { white-space: nowrap; }
+    .mnav-toggle { display: none; }
+
+    /* Desktop: widen the tap target without moving the active-link underline. */
+    @media (min-width: 640px) {
+      header nav a { position: relative; }
+      header nav a::after { content: ''; position: absolute; left: -6px; right: -6px; top: 50%; transform: translateY(-50%); height: 44px; }
+    }
+
+    /* Mobile: nav collapses behind a toggle and drops into its own row. */
+    @media (max-width: 639px) {
+      header[data-mnav] { flex-wrap: wrap; row-gap: 0; }
+      /* !important throughout: the design-system Header sets these inline. */
+      header[data-mnav] > nav { display: none !important; }
+      header[data-mnav][data-mnav-open="true"] > nav { display: flex !important; flex-basis: 100%; flex-direction: column !important; align-items: stretch !important; gap: 0 !important; padding: 8px 0 4px; }
+      header[data-mnav] > nav > a { min-height: 44px; display: flex !important; align-items: center; border-bottom: 1px solid var(--border-hairline) !important; }
+      header[data-mnav] > nav > button { width: 100% !important; margin-top: var(--space-4); }
+      .mnav-toggle { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+      .mnav-toggle span { display: block; width: 22px; height: 2px; border-radius: 2px; background: var(--ink-900); transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(2) { opacity: 0; }
+      header[data-mnav-open="true"] .mnav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      /* Remaining standalone links below the 44px tap minimum. */
+      header > a { min-height: 44px; align-items: center; }
+      a[href^="mailto:"] { display: inline-flex; align-items: center; min-height: 44px; }
+    }
   </style>
+  <script>
+    /* Adds a mobile toggle to the design-system Header, which ships desktop-only.
+       Kept here rather than in _ds_bundle.js so a design re-sync can't clobber it. */
+    (function () {
+      if (window.__indicMobileNav) return;
+      window.__indicMobileNav = true;
+      var BP = 639, seq = 0, queued = false;
+
+      function enhance() {
+        queued = false;
+        var headers = document.querySelectorAll('header');
+        for (var i = 0; i < headers.length; i++) {
+          var h = headers[i];
+          if (h.hasAttribute('data-mnav')) continue;
+          var nav = h.querySelector(':scope > nav');
+          if (!nav) continue;
+          h.setAttribute('data-mnav', '');
+          h.setAttribute('data-mnav-open', 'false');
+          if (!nav.id) nav.id = 'mnav-' + (++seq);
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'mnav-toggle';
+          btn.setAttribute('aria-label', 'Open menu');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-controls', nav.id);
+          btn.innerHTML = '<span></span><span></span><span></span>';
+          h.insertBefore(btn, nav);
+        }
+      }
+
+      function schedule() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(enhance);
+      }
+
+      function setOpen(h, open) {
+        h.setAttribute('data-mnav-open', open ? 'true' : 'false');
+        var btn = h.querySelector(':scope > .mnav-toggle');
+        if (btn) {
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        }
+      }
+
+      function closeAll() {
+        var open = document.querySelectorAll('header[data-mnav-open="true"]');
+        for (var i = 0; i < open.length; i++) setOpen(open[i], false);
+      }
+
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var btn = t.closest('.mnav-toggle');
+        if (btn) {
+          var h = btn.closest('header');
+          if (h) setOpen(h, h.getAttribute('data-mnav-open') !== 'true');
+          return;
+        }
+        /* Any nav item inside an open panel dismisses it. */
+        if (t.closest('header[data-mnav-open="true"] nav') && t.closest('a, button')) closeAll();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > BP) closeAll();
+      });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhance);
+      } else {
+        enhance();
+      }
+      new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
 </helmet>
 
 <div style="max-width: 1440px; margin: 0 auto; background: var(--surface-page); overflow-x: clip;">
@@ -45,7 +184,7 @@
     <div style="min-height: calc(100svh - 89px); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding: clamp(56px, 8vw, 120px) clamp(24px, 6.6vw, 96px);">
       <p style="margin: 0 0 clamp(20px, 3vw, 32px); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--amber-600);">Indic Software Solutions</p>
       <h1 style="position: relative; margin: 0; max-width: 17ch; font-size: clamp(38px, 5.6vw, 84px); line-height: var(--leading-display); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;"><span style="visibility: hidden;">Digital products that last.</span><span aria-hidden="true" style="position: absolute; inset: 0;">{{ typedTitle }}<sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}"><span style="display: inline-block; width: 0.05em; height: 0.78em; margin-left: 0.06em; background: var(--text-accent); animation: caret-blink 0.9s step-end infinite;"></span></sc-if></span></h1>
-      <p style="margin: clamp(24px, 3.4vw, 40px) 0 0; max-width: 52ch; font-size: clamp(28px, 1.9vw, 32px); line-height: var(--leading-body); color: var(--ink-700); text-wrap: pretty; width: 654px; height: 85px">At Indic, we build user-friendly software that is engineered to last long.</p>
+      <p style="margin: clamp(24px, 3.4vw, 40px) 0 0; max-width: 52ch; font-size: clamp(28px, 1.9vw, 32px); line-height: var(--leading-body); color: var(--ink-700); text-wrap: pretty;">At Indic, we build user-friendly software that is engineered to last long.</p>
       <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: clamp(32px, 4vw, 48px);">
         <div id="hero-cta"><x-import component-from-global-scope="IndicSoftware.Button" variant="accent" size="lg" on-click="{{ openMail }}" hint-size="auto,52px">Start a project</x-import></div>
         <x-import component-from-global-scope="IndicSoftware.Button" variant="outline" size="lg" on-click="{{ scrollToWork }}" hint-size="auto,52px">See our work</x-import>
@@ -58,19 +197,19 @@
     <div data-reveal="" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-5); margin-bottom: clamp(40px, 5vw, 72px);">
       <div>
         <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">Work</p>
-        <h2 style="margin: 0; max-width: 24ch; font-size: clamp(30px, 4vw, 52px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty; width: 613px; height: 105px">Projects we have designed and built</h2>
+        <h2 style="margin: 0; max-width: 24ch; font-size: clamp(30px, 4vw, 52px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">Projects we have designed and built</h2>
       </div>
-      <p style="margin: 0; max-width: 34ch; font-size: var(--text-body-md); line-height: var(--leading-body); color: var(--text-secondary); width: 447px; height: 125px">Our work spans custom supply planning solutions, event platforms, e-commerce stores, portfolio websites, membership platforms and websites for culture, art and knowledge organisations.</p>
+      <p style="margin: 0; max-width: 34ch; font-size: var(--text-body-md); line-height: var(--leading-body); color: var(--text-secondary);">Our work spans custom supply planning solutions, event platforms, e-commerce stores, portfolio websites, membership platforms and websites for culture, art and knowledge organisations.</p>
     </div>
 
-    <article data-reveal="" style="border: 1px solid var(--border-hairline); background: var(--surface-card); display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); align-items: stretch;">
+    <article data-reveal="" style="border: 1px solid var(--border-hairline); background: var(--surface-card); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); align-items: stretch;">
       <div style="padding: clamp(28px, 3.4vw, 48px); display: flex; flex-direction: column; gap: var(--space-5);">
         <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
           
           <x-import component-from-global-scope="IndicSoftware.Tag" tone="neutral" outline="{{ true }}" hint-size="auto,24px">Product · Supply Planning</x-import>
         </div>
         <h3 style="margin: 0; font-size: clamp(26px, 2.6vw, 42px); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">SCmple: supply planning solutions for pharma</h3>
-        <div style="display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div style="display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));">
           <div>
             <p style="margin: 0 0 var(--space-2); font-size: 12px; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-muted);">The problem</p>
             <p style="font-size: var(--text-body-md); line-height: var(--leading-body); color: var(--text-body);">Planners ran a regulated supply chain across spreadsheets and disconnected tools. Nobody could point at one version of the plan.</p>
@@ -85,7 +224,7 @@
           <a href="https://app.scmple.com/" target="_blank" rel="noopener" style="font-family: var(--font-mono); font-size: var(--text-caption);">app.scmple.com →</a>
         </div>
       </div>
-      <div style="position: relative; min-height: 380px; border-left: 1px solid var(--border-hairline); background: var(--surface-sunken); display: flex; align-items: center; justify-content: center; padding: clamp(20px, 3vw, 32px);">
+      <div id="featured-shot" style="position: relative; min-height: 380px; border-left: 1px solid var(--border-hairline); background: var(--surface-sunken); display: flex; align-items: center; justify-content: center; padding: clamp(20px, 3vw, 32px);">
         <div style="width: 100%; border-radius: 18px; background: var(--surface-card); border: 1px solid var(--border-hairline); padding: 8px 8px 12px; box-shadow: 0 14px 30px -18px rgba(31, 24, 12, 0.14), 0 3px 10px -6px rgba(31, 24, 12, 0.06);">
           <div style="position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 16/10;">
             <img src="uploads/t-scmple.png" alt="screenshot-2026-08-06-at-1-06-57-pm" width="2938" height="1596" style="max-width: 100%; height: auto; display: block; object-fit: cover; width: 2938px; aspect-ratio: 2938 / 1596">
@@ -95,7 +234,7 @@
       </div>
     </article>
 
-    <div id="work-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-4); margin-top: var(--space-4);">
+    <div id="work-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: var(--space-4); margin-top: var(--space-4);">
 
       <a data-reveal="" href="https://www.brhat.in/" target="_blank" rel="noopener" style="display: block; color: inherit;">
         <x-import component-from-global-scope="IndicSoftware.Card" ground="paper" interactive="{{ true }}" kicker="product · membership platform" title="Bṛhat: courses, library and membership for Indian knowledge systems based culture org" footer="Product Design · Rails Engineering · Payments · Page Builder" hint-size="100%,520px">
@@ -156,8 +295,8 @@
   </section>
 
   <section id="services" style="padding: clamp(64px, 8.5vw, 128px) clamp(24px, 6.6vw, 96px); background: var(--surface-sunken); border-top: 1px solid var(--border-hairline); border-bottom: 1px solid var(--border-hairline);">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(32px, 5vw, 72px); align-items: start;">
-      <div data-reveal="" style="position: sticky; top: clamp(32px, 4vw, 56px);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: clamp(32px, 5vw, 72px); align-items: start;">
+      <div id="services-intro" data-reveal="" style="position: sticky; top: clamp(32px, 4vw, 56px);">
         <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">Services</p>
         <h2 style="margin: 0; max-width: 18ch; font-size: clamp(30px, 4vw, 52px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">What we do</h2>
         <p style="margin: var(--space-5) 0 0; max-width: 38ch; font-size: var(--text-body-lg); line-height: var(--leading-body); color: var(--text-body);">We design and build web products, and can service a range of different requirements, from a full build to a single stage. Most projects start with discovery and continue as a monthly retainer.</p>
@@ -200,7 +339,7 @@
       <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">How we work</p>
       <h2 style="margin: 0; font-size: clamp(30px, 4vw, 52px); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">Our process</h2>
     </div>
-    <div style="margin: clamp(40px, 5vw, 72px) 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; border-top: 1px solid var(--border-hairline);">
+    <div id="process-steps" style="margin: clamp(40px, 5vw, 72px) 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 0; border-top: 1px solid var(--border-hairline);">
       <div data-reveal="" style="padding: var(--space-6) var(--space-5) var(--space-6) 0; border-right: 1px solid var(--border-hairline);">
         <span style="font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-accent);">01</span>
         <h3 style="margin: var(--space-4) 0 var(--space-3); font-size: var(--text-heading-3); letter-spacing: var(--tracking-heading); font-weight: 600; color: var(--text-primary);">Discover</h3>
@@ -231,7 +370,7 @@
         <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">Stack</p>
         <h2 style="margin: 0; max-width: 20ch; font-size: clamp(26px, 3vw, 42px); line-height: var(--leading-heading); letter-spacing: var(--tracking-heading); font-weight: 600; color: var(--text-primary); text-wrap: pretty;">Technologies we build with</h2>
       </div>
-      <div style="margin-top: clamp(32px, 4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(32px, 4vw, 56px); border-top: 1px solid var(--line-300); padding-top: clamp(28px, 3vw, 40px);">
+      <div style="margin-top: clamp(32px, 4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: clamp(32px, 4vw, 56px); border-top: 1px solid var(--line-300); padding-top: clamp(28px, 3vw, 40px);">
         <div data-reveal="" style="display: flex; flex-direction: column; gap: var(--space-4);">
           <p style="margin: 0; font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-muted);">Core stack</p>
           <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
@@ -270,7 +409,7 @@
   <sc-if value="{{ showTestimonials }}" hint-placeholder-val="{{ true }}">
     <section style="padding: clamp(56px, 7vw, 104px) clamp(24px, 6.6vw, 96px); background: var(--surface-sunken); border-top: 1px solid var(--border-hairline); border-bottom: 1px solid var(--border-hairline);">
       <p data-reveal="" style="margin: 0 0 clamp(32px, 4vw, 56px); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--text-accent);">In their words</p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-4);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: var(--space-4);">
         <figure data-reveal="" style="margin: 0; padding: clamp(28px, 3vw, 40px); background: var(--surface-card); border: 1px solid var(--border-hairline); display: flex; flex-direction: column; gap: var(--space-5);">
           <blockquote style="margin: 0; font-size: clamp(19px, 1.8vw, 24px); line-height: 1.45; letter-spacing: var(--tracking-heading); color: var(--text-primary); text-wrap: pretty;">Your client's words go here: one or two sentences on what changed after we shipped.</blockquote>
           <figcaption style="font-family: var(--font-mono); font-size: var(--text-caption); color: var(--text-secondary);">Name, role — organisation</figcaption>
@@ -285,7 +424,7 @@
 
   <section id="contact" style="background: var(--surface-ink);">
     <x-import component-from-global-scope="IndicSoftware.Motif" name="aavartan" on-ink="{{ true }}" height="140px" hint-size="100%,140px"></x-import>
-    <div style="padding: clamp(48px, 6vw, 96px) clamp(24px, 6.6vw, 96px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(40px, 6vw, 96px); align-items: start;">
+    <div style="padding: clamp(48px, 6vw, 96px) clamp(24px, 6.6vw, 96px) clamp(64px, 8vw, 120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: clamp(40px, 6vw, 96px); align-items: start;">
       <div data-reveal="" style="display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px);">
         <div>
           <p style="margin: 0 0 var(--space-4); font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-caption); text-transform: uppercase; color: var(--turmeric-400);">Contact</p>
@@ -299,7 +438,7 @@
         </div>
       </div>
       <div data-reveal="" style="border: 1px solid var(--tint-amber-16); padding: clamp(28px, 3.4vw, 44px); display: flex; flex-direction: column; gap: var(--space-4); --text-muted: var(--text-on-ink-muted); --surface-card: rgba(250, 244, 232, 0.07); --text-primary: var(--text-on-ink); --border-hairline: var(--tint-amber-16);">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: var(--space-4);">
           <x-import component-from-global-scope="IndicSoftware.Input" label="Name" value="{{ contactName }}" on-change="{{ onContactNameChange }}" placeholder="Your name" hint-size="100%,64px"></x-import>
           <x-import component-from-global-scope="IndicSoftware.Input" label="Email" type="email" value="{{ contactEmail }}" on-change="{{ onContactEmailChange }}" placeholder="you@company.com" hint-size="100%,64px"></x-import>
         </div>
