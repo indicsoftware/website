@@ -272,14 +272,15 @@ var IndicSoftware = (() => {
   };
   var VARIANTS = {
     primary: {
-      background: "var(--surface-ink)",
-      color: "var(--text-on-ink)",
-      border: "1px solid var(--surface-ink)"
+      background: "var(--surface-accent)",
+      color: "var(--text-on-accent)",
+      border: "1px solid transparent",
+      fontWeight: "var(--weight-semibold)"
     },
     accent: {
       background: "var(--surface-accent)",
       color: "var(--text-on-accent)",
-      border: "1px solid var(--surface-accent)",
+      border: "1px solid transparent",
       fontWeight: "var(--weight-semibold)"
     },
     outline: {
@@ -308,7 +309,7 @@ var IndicSoftware = (() => {
     const [hover, setHover] = import_react3.default.useState(false);
     const v = VARIANTS[variant] || VARIANTS.primary;
     const s = SIZES[size] || SIZES.md;
-    const hoverStyle = !disabled && hover ? variant === "accent" ? { background: "var(--amber-600)", borderColor: "var(--amber-600)", color: "var(--paper-100)" } : variant === "primary" ? { background: "var(--ink-700)", borderColor: "var(--ink-700)" } : { background: "var(--sand-050)" } : null;
+    const hoverStyle = !disabled && hover ? variant === "accent" || variant === "primary" ? { background: "var(--amber-600)", borderColor: "var(--amber-600)", color: "var(--paper-100)" } : { background: "var(--sand-050)" } : null;
     return /* @__PURE__ */ import_react3.default.createElement(
       "button",
       {
