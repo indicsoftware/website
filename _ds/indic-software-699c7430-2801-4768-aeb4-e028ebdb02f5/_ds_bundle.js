@@ -204,10 +204,19 @@ var IndicSoftware = (() => {
         const hiddenRight = "inset(-15% 108% -25% -8%)";
         const hiddenLeft = "inset(-15% -8% -25% 108%)";
         const t = "clip-path 620ms " + ease;
-        if (on) return sweepPhase === "prep" ? { clipPath: hiddenRight, transition: "none" } : { clipPath: full, transition: t };
-        if (sweepPhase === "prep") return { clipPath: full, transition: "none" };
-        if (sweepPhase === "idle") return { clipPath: hiddenRight, transition: "none" };
-        return { clipPath: hiddenLeft, transition: t };
+        /* Both marks stay mounted, so a clip that doesn't take is a second
+           wordmark painted over the first. iOS Safari leaves the tail of the
+           swept-away mark on screen that way, so the resting hidden states
+           also go opacity 0 / visibility hidden rather than trusting the clip
+           alone. Both flip only once the 620ms sweep has finished, so the
+           reveal still reads as a pure clip and never as a fade. */
+        const settle = ", opacity 1ms linear 620ms, visibility 0ms linear 620ms";
+        const shown = { opacity: 1, visibility: "visible" };
+        const gone = { opacity: 0, visibility: "hidden" };
+        if (on) return sweepPhase === "prep" ? { clipPath: hiddenRight, ...shown, transition: "none" } : { clipPath: full, ...shown, transition: t };
+        if (sweepPhase === "prep") return { clipPath: full, ...shown, transition: "none" };
+        if (sweepPhase === "idle") return { clipPath: hiddenRight, ...gone, transition: "none" };
+        return { clipPath: hiddenLeft, ...gone, transition: t + settle };
       }
       return { opacity: on ? 1 : 0, transition: "opacity 620ms " + ease };
     };
