@@ -1,6 +1,3 @@
 {
-  "cleanUrls": false,
-  "rewrites": [
-    { "source": "/", "destination": "/Indic%20Software%20Site.dc.html" }
-  ]
+  "cleanUrls": true
 }

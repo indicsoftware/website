@@ -13,4 +13,4 @@ date: 2026-07-27T13:26:27Z
 ## Screen map
 | Screen | Built from |
 | --- | --- |
-| Indic Software Landing.dc.html — featured work | indicsoftware/brhat-app README.md, indicsoftware/khoj README.md |
+| index.html — featured work | indicsoftware/brhat-app README.md, indicsoftware/khoj README.md |
