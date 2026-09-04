@@ -3,3 +3,6 @@
 
 # Stale bundled export — the site is served from the .dc.html sources via vercel.json
 index.html
+
+# Amp orb runtime data
+.amp/portals/*
