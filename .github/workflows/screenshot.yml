@@ -47,4 +47,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "uploads/t-$NAME.png"
           git commit -m "Add screenshot for $NAME"
-          git push
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase && git push && break
+            sleep 5
+          done
